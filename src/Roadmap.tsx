@@ -6,14 +6,12 @@ import axios from 'axios';
 
 timeline(Highcharts);
 
-
-
 const Roadmap = (props: HighchartsReact.Props) => {
 
 
 
     const [topic, setTopic] = useState<string>("");
-    const [steps, setSteps] = useState<Array<{ x: Date, name: string, description: string, color: string }>>([]);
+    const [steps, setSteps] = useState<Array<{ x: number, name: string, label: string, description: string, color: string }>>([]);
 
     const getRandomColor = () => {
         const r = Math.floor(Math.random() * 256).toString(16); // Random between 0-255
@@ -23,18 +21,15 @@ const Roadmap = (props: HighchartsReact.Props) => {
     }
 
     const handleSteps = (response: JSON) => {
-        console.log(response);
         const now = new Date();
         let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const stepResponse = []
         for (let [key, value] of Object.entries(response)) {
-            stepResponse.push({ x: new Date(date), name: key, description: value, color: getRandomColor()});
-            //setSteps((prev) => [...prev, { x: new Date(date), name: key, value: value}]);
-            date.setMonth(date.getMonth() + 6);
+            stepResponse.push({ x: new Date(date).getTime(), name: key, label: value, description: value, color: getRandomColor()});
+            //setSteps((prev) => [...prev, { x: new Date(date), name: key, description: value, color: getRandomColor()}]);
+            date.setMonth(date.getMonth() + 3);
         }
         setSteps(stepResponse);
-        console.log(steps);
-        
     }
 
     const getRoadmap = async () => {
@@ -56,7 +51,8 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
     const options: Highcharts.Options = {
         chart: {
-          type: "timeline", // change to yours!!!
+          type: "timeline", 
+          height: "600px",
           inverted: true
         },
       
@@ -93,15 +89,9 @@ const Roadmap = (props: HighchartsReact.Props) => {
           }
         },
         title: {
-          text: ""
+          text: `${topic} Roadmap`
         },
-        // yAxis: {
-        //   title: {
-        //     text: undefined
-        //   },
-        //   min: -5,
-        //   max: 5
-        // },
+
       
         legend: {
           enabled: false
@@ -120,7 +110,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
     return (
         <>
-        <HighchartsReact
+        <HighchartsReact 
           highcharts={Highcharts}
           options={options}
           ref={chartComponentRef}
