@@ -13,14 +13,26 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
 
     const [topic, setTopic] = useState<string>("");
-    const [steps, setSteps] = useState<Array<{ name: string, value: any }>>([]);
+    const [steps, setSteps] = useState<Array<{ x: Date, name: string, description: string, color: string }>>([]);
+
+    const getRandomColor = () => {
+        const r = Math.floor(Math.random() * 256).toString(16); // Random between 0-255
+        const g = Math.floor(Math.random() * 256).toString(16); // Random between 0-255
+        const b = Math.floor(Math.random() * 256).toString(16); // Random between 0-255
+        return `#${r.padStart(2, '0')}${g.padStart(2, '0')}${b.padStart(2, '0')}`; // Collect all to a css color string
+    }
 
     const handleSteps = (response: JSON) => {
         console.log(response);
+        const now = new Date();
+        let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const stepResponse = []
         for (let [key, value] of Object.entries(response)) {
-            setSteps((prev) => [...prev, { name: key, value: value}])
+            stepResponse.push({ x: new Date(date), name: key, description: value, color: getRandomColor()});
+            //setSteps((prev) => [...prev, { x: new Date(date), name: key, value: value}]);
+            date.setMonth(date.getMonth() + 6);
         }
-        // const length = Object.keys(object).length;
+        setSteps(stepResponse);
         console.log(steps);
         
     }
@@ -98,22 +110,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
           {
             type: 'timeline', // Explicit type
             name: 'Timeline',
-            data: [
-              {
-                x: Date.UTC(2020, 0, 1), // Date for the timeline
-                name: 'Start of Year',
-                label: 'Event 1',
-                description: 'Description of Event 1',
-                color: '#6151db', // Color for the event
-              },
-              {
-                x: Date.UTC(2020, 6, 1),
-                name: 'Mid-Year Event',
-                label: 'Event 2',
-                description: 'Description of Event 2',
-                color: '#ab47bc',
-              },
-            ],
+            data: steps,
           },
         ],
         credits: {
