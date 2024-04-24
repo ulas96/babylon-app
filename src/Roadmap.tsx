@@ -1,8 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import timeline from 'highcharts/modules/timeline';
-
 import axios from 'axios';
 
 timeline(Highcharts);
@@ -11,9 +10,31 @@ timeline(Highcharts);
 
 const Roadmap = (props: HighchartsReact.Props) => {
 
-    
 
-    const [topic, setTopic] = React.useState('');
+
+    const [topic, setTopic] = useState<string>("");
+    const [steps, setSteps] = useState<Array<{ name: string, value: any }>>([]);
+
+    const handleSteps = (response: JSON) => {
+        console.log(response);
+        for (let [key, value] of Object.entries(response)) {
+            setSteps((prev) => [...prev, { name: key, value: value}])
+        }
+        // const length = Object.keys(object).length;
+        console.log(steps);
+        
+    }
+
+    const getRoadmap = async () => {
+        const response = await axios.post(`https://4sfwic0hia.execute-api.eu-central-1.amazonaws.com/default/langchain?topic=${topic}`);
+        try {
+            const parsedResponse = JSON.parse(response.data.steps);
+            handleSteps(parsedResponse);
+        } catch (error) {
+            console.error("Received data is not valid JSON, refetching...");
+            getRoadmap();
+        }
+    }
 
     const handleTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTopic(event.target.value);
@@ -111,8 +132,11 @@ const Roadmap = (props: HighchartsReact.Props) => {
         
 
         <input value={topic} onChange={handleTopic}/>
+        <button onClick={getRoadmap}> Get Roadmap</button>
         </>
 
+
+        
       );
 }
 
