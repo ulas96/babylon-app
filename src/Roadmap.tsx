@@ -11,7 +11,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
 
     const [topic, setTopic] = useState<string>("");
-    const [steps, setSteps] = useState<Array<{ x: number, name: string, label: string, description: string, color: string }>>([]);
+    const [steps, setSteps] = useState<Array<{ x: number, name: string, label: string, color: string }>>([]);
 
     const getRandomColor = () => {
         const r = Math.floor(Math.random() * 256).toString(16); // Random between 0-255
@@ -25,7 +25,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
         let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const stepResponse = []
         for (let [key, value] of Object.entries(response)) {
-            stepResponse.push({ x: new Date(date).getTime(), name: key, label: value, description: value, color: getRandomColor()});
+            stepResponse.push({ x: new Date(date).getTime(), name: key, label: value, color: getRandomColor()});
             //setSteps((prev) => [...prev, { x: new Date(date), name: key, description: value, color: getRandomColor()}]);
             date.setMonth(date.getMonth() + 3);
         }
@@ -64,26 +64,31 @@ const Roadmap = (props: HighchartsReact.Props) => {
             }
           }
         },
+        yAxis: {
+          visible: false
+        },
       
         plotOptions: {
           columnrange: {
             dataLabels: {
-              enabled: true,
+        
+              enabled: false,
               inside: true,
               color: "white",
               formatter: function () {
-                if (typeof this.y !== 'number') {
-                  return ''; // return an empty string if y is undefined or not a number
-                }
+                return "";
+                // if (typeof this.y !== 'number') {
+                //   return ''; // return an empty string if y is undefined or not a number
+                // }
       
-                // Default colors for specific conditions
-                if (this.y > 0) {
-                  this.point.color = '#6151db';
-                } else if (this.y < 0) {
-                  this.point.color = '#ab47bc';
-                }
+                // // Default colors for specific conditions
+                // if (this.y > 0) {
+                //   this.point.color = '#6151db';
+                // } else if (this.y < 0) {
+                //   this.point.color = '#ab47bc';
+                // }
       
-                return this.y.toString(); // Safely convert to string for display
+                // return this.y.toString(); // Safely convert to string for display
               }
             }
           }
@@ -91,7 +96,9 @@ const Roadmap = (props: HighchartsReact.Props) => {
         title: {
           text: `${topic} Roadmap`
         },
-
+        tooltip: {
+          enabled: false
+        },
       
         legend: {
           enabled: false
