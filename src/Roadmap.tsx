@@ -117,6 +117,8 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
     return (
         <>
+        <input value={topic} onChange={handleTopic}/>
+        <button onClick={getRoadmap}> Get Roadmap</button>
         <HighchartsReact 
           highcharts={Highcharts}
           options={options}
@@ -125,8 +127,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
         />
         
 
-        <input value={topic} onChange={handleTopic}/>
-        <button onClick={getRoadmap}> Get Roadmap</button>
+
         </>
 
 
