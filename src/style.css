@@ -1,0 +1,27 @@
+/* Navbar */
+
+.navbar-container{
+    background-color: #0e1418;
+}
+
+.brand-container{
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand .navbar-text{
+    font-size: 2rem;
+    color: aliceblue;
+    padding-left: 10px;
+}
+
+
+/* Roadmap */
+
+.roadmap-header {
+    color: white;
+    background-color: #0e1418;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

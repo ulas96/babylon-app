@@ -3,6 +3,7 @@ import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import timeline from 'highcharts/modules/timeline';
 import axios from 'axios';
+import "./style.css";
 
 timeline(Highcharts);
 
@@ -53,15 +54,16 @@ const Roadmap = (props: HighchartsReact.Props) => {
         chart: {
           type: "timeline", 
           height: "600px",
-          inverted: true
+          inverted: true,
+          backgroundColor: "#0e1418"
         },
       
         xAxis: {
           type: 'datetime', // Set the x-axis type to datetime
           labels: {
-            formatter: function () {
-              return Highcharts.dateFormat('%Y-%m-%d', this.value as number); // Format the date
-            }
+            // formatter: function () {
+            //   return Highcharts.dateFormat('%Y-%m-%d', this.value as number); // Format the date
+            // }
           }
         },
         yAxis: {
@@ -117,17 +119,24 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
     return (
         <>
-        <input value={topic} onChange={handleTopic}/>
-        <button onClick={getRoadmap}> Get Roadmap</button>
-        <HighchartsReact 
-          highcharts={Highcharts}
-          options={options}
-          ref={chartComponentRef}
-          {...props}
-        />
+          <div className="roadmap-header">
+            <h1>Create your own AI powered educational journey</h1>
+            
+          </div>
+
+          <div className="roadmap-header">
+          <input value={topic} onChange={handleTopic}/>
+            <button onClick={getRoadmap}> Get Roadmap</button>
+          </div>
+
+
+          <HighchartsReact 
+            highcharts={Highcharts}
+            options={options}
+            ref={chartComponentRef}
+            {...props}
+          />
         
-
-
         </>
 
 
