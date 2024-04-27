@@ -25,3 +25,23 @@
     justify-content: center;
     align-items: center;
 }
+
+.highcharts-data-label-box > div {
+    background-color: #f3f3f3 !important; /* Replace with the color you want */
+}
+
+g.highcharts-data-labels.highcharts-series-0.highcharts-timeline-series.highcharts-tracker {
+    fill: red !important;
+}
+
+.steps {
+    background-color: blue;
+}
+
+g.highcharts-data-labels.highcharts-series-0.highcharts-timeline-series.highcharts-tracker > g > rect{
+    fill: var();
+}
+
+.highcharts-background {
+    fill: #0e1418 !important;
+}
