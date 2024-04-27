@@ -2,7 +2,7 @@ import Roadmap from './Roadmap';
 import Navigation from './Navigation';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import '../node_modules/highcharts/css/highcharts.css';
 
 const App = () => {
 
