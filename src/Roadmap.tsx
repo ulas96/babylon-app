@@ -15,10 +15,10 @@ const Roadmap = (props: HighchartsReact.Props) => {
     const [steps, setSteps] = useState<Array<{ x: number, name: string, label: string, color: string }>>([]);
 
     const getRandomColor = () => {
-        const r = Math.floor(Math.random() * 256).toString(16); // Random between 0-255
-        const g = Math.floor(Math.random() * 256).toString(16); // Random between 0-255
-        const b = Math.floor(Math.random() * 256).toString(16); // Random between 0-255
-        return `#${r.padStart(2, '0')}${g.padStart(2, '0')}${b.padStart(2, '0')}`; // Collect all to a css color string
+        const r = Math.floor(Math.random() * 256).toString(16); 
+        const g = Math.floor(Math.random() * 256).toString(16); 
+        const b = Math.floor(Math.random() * 256).toString(16); 
+        return `#${r.padStart(2, '0')}${g.padStart(2, '0')}${b.padStart(2, '0')}`; 
     }
 
     const handleSteps = (response: JSON) => {
@@ -52,6 +52,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
     const options: Highcharts.Options = {
         chart: {
+          
           type: "timeline", 
           height: "600px",
           inverted: true,
@@ -73,24 +74,10 @@ const Roadmap = (props: HighchartsReact.Props) => {
         plotOptions: {
           columnrange: {
             dataLabels: {
-        
-              enabled: false,
-              inside: true,
-              color: "white",
+              useHTML: true,
+              color: '',
               formatter: function () {
-                return "";
-                // if (typeof this.y !== 'number') {
-                //   return ''; // return an empty string if y is undefined or not a number
-                // }
-      
-                // // Default colors for specific conditions
-                // if (this.y > 0) {
-                //   this.point.color = '#6151db';
-                // } else if (this.y < 0) {
-                //   this.point.color = '#ab47bc';
-                // }
-      
-                // return this.y.toString(); // Safely convert to string for display
+                return `<div class="steps">${this.point.name}</div>`;
               }
             }
           }
@@ -120,8 +107,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
     return (
         <>
           <div className="roadmap-header">
-            <h1>Create your own AI powered educational journey</h1>
-            
+            <h1>Create your own AI powered educational journey</h1>  
           </div>
 
           <div className="roadmap-header">
