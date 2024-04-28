@@ -11,8 +11,11 @@
 
 .navbar-brand .navbar-text{
     font-size: 2rem;
-    color: aliceblue;
+    color: "#154d77" !important;
     padding-left: 10px;
+    background: linear-gradient(to right, #5eb7b7, #154d77) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }
 
 
@@ -20,26 +23,10 @@
 
 .roadmap-header {
     color: white;
-    background-color: #0e1418;
+    background-color: #0e1418 !important;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.highcharts-data-label-box > div {
-    background-color: #f3f3f3 !important; /* Replace with the color you want */
-}
-
-g.highcharts-data-labels.highcharts-series-0.highcharts-timeline-series.highcharts-tracker {
-    fill: red !important;
-}
-
-.steps {
-    background-color: blue;
-}
-
-g.highcharts-data-labels.highcharts-series-0.highcharts-timeline-series.highcharts-tracker > g > rect{
-    fill: var();
 }
 
 .highcharts-background {
