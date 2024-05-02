@@ -29,6 +29,7 @@
     align-items: center;
 }
 
+
 .highcharts-background {
     fill:#0e1418  !important;
 }
@@ -46,5 +47,5 @@
 }
 
 /* path.highcharts-graph {
-   
+    stroke: linear-gradient(to top, #5eb7b7, #154d77) !important;
 } */
