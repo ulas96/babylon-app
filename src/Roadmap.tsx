@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import timeline from 'highcharts/modules/timeline';
@@ -79,7 +79,6 @@ const Roadmap = (props: HighchartsReact.Props) => {
           // Append the style element to the document head
           document.head.append(style);
       });
-        console.log(colors);
         const now = new Date();
         let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
@@ -117,7 +116,6 @@ const Roadmap = (props: HighchartsReact.Props) => {
     const handleTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTopic(event.target.value);
     };
-    console.log(colors);
     const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
     const options: Highcharts.Options = {
@@ -128,6 +126,25 @@ const Roadmap = (props: HighchartsReact.Props) => {
           inverted: true,
           backgroundColor: "#0e1418"
         },
+        defs: {
+          gradient0: {
+              tagName: 'linearGradient',
+              id: 'gradient0',
+              x1: 0,
+              y1: 0,
+              x2: 0,
+              y2: 1,
+              children: [{
+                  tagName: 'stop',
+                  offset: 0,
+                  'stop-color': '#5eb7b7' // start color of the gradient
+              }, {
+                  tagName: 'stop',
+                  offset: 1,
+                  'stop-color': '#154d77' // end color of the gradient
+              }]
+          } as any
+      },
       
         xAxis: {
           type: 'datetime', // Set the x-axis type to datetime
@@ -143,21 +160,22 @@ const Roadmap = (props: HighchartsReact.Props) => {
       
 
         plotOptions: {
-            series: {
+          series: {
               dataLabels: {
-                enabled: true,
-                format: '{point.name}: {point.label}',
-                style: {
-
-                  textOutline: 'none',
-                  fontWeight: 'normal'
-                },
-                useHTML: true,
-                formatter: function() {
-                  return `<div style="background-color: ${this.point.color}; padding: 5px;">${this.point.name}: ${this.point.options.label}</div>`;
-                }
+                  useHTML: true,
+                  padding: 0,
+                  borderWidth: 0,
+                  
+                  formatter: function() {
+                      return `<div style="background-color: ${this.point.color}; padding: 5px; border-radius: 5px; color: white;">${this.point.name}: ${this.point.options.label}</div>`;
+                  },
+                  style: {
+                      color: 'black',
+                      textOutline: 'none',
+                      fontWeight: 'normal'
+                  }
               }
-            }
+          }
       },
         title: {
           text: `${topic} Roadmap`
@@ -176,6 +194,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
             type: 'timeline', // Explicit type
             name: 'Timeline',
             data: steps,
+            color: "url(#gradient0)"
           },
         ],
         credits: {
@@ -183,7 +202,33 @@ const Roadmap = (props: HighchartsReact.Props) => {
         }
       };
 
-    return (
+    // const labelBoxes = document.querySelectorAll('.highcharts-label-box');
+
+    // labelBoxes.forEach((box, index) => {
+    //   box.setAttribute('fill', colors[index % colors.length]);
+    // });
+
+    useEffect(() => {
+      if (chartComponentRef.current) {
+          const chart = chartComponentRef.current.chart;
+          const points = chart.series[0].points;
+  
+          points.forEach((point: any, index) => {
+              if (point.dataLabels && point.dataLabels.length > 0) {
+                  const dataLabel = point.dataLabels[0];
+                  if (dataLabel && dataLabel.box) {
+                      dataLabel.box.attr({
+                          fill: colors[index % colors.length]
+                      });
+                  }
+              }
+          });
+      }
+  }, [chartComponentRef, colors]);
+
+
+  
+  return(
         <>
           <div className="roadmap-header">
             <h1>Create your own AI powered educational journey</h1>  
@@ -204,9 +249,6 @@ const Roadmap = (props: HighchartsReact.Props) => {
           />
         
         </>
-
-
-        
       );
 }
 
