@@ -126,25 +126,25 @@ const Roadmap = (props: HighchartsReact.Props) => {
           inverted: true,
           backgroundColor: "#0e1418"
         },
-        defs: {
-          gradient0: {
-              tagName: 'linearGradient',
-              id: 'gradient0',
-              x1: 0,
-              y1: 0,
-              x2: 0,
-              y2: 1,
-              children: [{
-                  tagName: 'stop',
-                  offset: 0,
-                  'stop-color': '#5eb7b7' // start color of the gradient
-              }, {
-                  tagName: 'stop',
-                  offset: 1,
-                  'stop-color': '#154d77' // end color of the gradient
-              }]
-          } as any
-      },
+      //   defs: {
+      //     gradient0: {
+      //         tagName: 'linearGradient',
+      //         id: 'gradient0',
+      //         x1: 0,
+      //         y1: 0,
+      //         x2: 0,
+      //         y2: 1,
+      //         children: [{
+      //             tagName: 'stop',
+      //             offset: 0,
+      //             'stop-color': '#5eb7b7' // start color of the gradient
+      //         }, {
+      //             tagName: 'stop',
+      //             offset: 1,
+      //             'stop-color': '#154d77' // end color of the gradient
+      //         }]
+      //     } as any
+      // },
       
         xAxis: {
           type: 'datetime', // Set the x-axis type to datetime
@@ -167,7 +167,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
                   borderWidth: 0,
                   
                   formatter: function() {
-                      return `<div style="background-color: ${this.point.color}; padding: 5px; border-radius: 5px; color: white;">${this.point.name}: ${this.point.options.label}</div>`;
+                      return `<div style="background-color: ${this.point.color}; padding: 5px; border-radius: 5px; color: white; font-size: 17px;">${this.point.name}: ${this.point.options.label}</div>`;
                   },
                   style: {
                       color: 'black',
@@ -178,7 +178,10 @@ const Roadmap = (props: HighchartsReact.Props) => {
           }
       },
         title: {
-          text: `${topic} Roadmap`
+          text: `${topic} Roadmap`,
+          style: {
+            color: "#ffffff",
+          }
         },
 
         tooltip: {
@@ -194,7 +197,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
             type: 'timeline', // Explicit type
             name: 'Timeline',
             data: steps,
-            color: "url(#gradient0)"
+
           },
         ],
         credits: {
@@ -226,8 +229,37 @@ const Roadmap = (props: HighchartsReact.Props) => {
       }
   }, [chartComponentRef, colors]);
 
+//   useEffect(() => {
+//     if (chartComponentRef.current) {
+//         const chart = chartComponentRef.current.chart;
 
-  
+//         // Check if the chart's data is available
+//         if (chart.series[0]?.data && chart.series[0].data.length > 0) {
+//             // Remove the existing line
+//             chart.series[0].update({
+//               lineWidth: 10,
+//               type: 'timeline'
+//             });
+
+//             // Add a plotLine for each data point
+//             chart.series[0].data.forEach((point, i, points) => {
+//               const color1 = Highcharts.color('#5eb7b7').tweenTo(
+//                 Highcharts.color('#154d77'),
+//                 i / (points.length - 1) // Calculate the color gradient position
+//               );
+
+//               chart.yAxis[0].addPlotLine({
+//                 color: color1.toString(),
+//                 width: 2,
+//                 value: point.y,
+//                 zIndex: 5 // To make sure the line is above the grid
+//               });
+//             });
+//         }
+//     }
+// }, [chartComponentRef]);
+
+
   return(
         <>
           <div className="roadmap-header">
