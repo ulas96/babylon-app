@@ -37,6 +37,14 @@
     fill:#0e1418  !important;
 }   
 
-/* .highcharts-label-box{
-    fill: red ;
+.highcharts-label-box{
+    fill: none;
+}
+
+.highcharts-point {
+    stroke: none;
+}
+
+/* path.highcharts-graph {
+   
 } */
