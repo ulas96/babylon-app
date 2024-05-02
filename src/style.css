@@ -30,5 +30,13 @@
 }
 
 .highcharts-background {
-    fill: #0e1418 !important;
+    fill:#0e1418  !important;
 }
+
+.steps{
+    fill:#0e1418  !important;
+}   
+
+/* .highcharts-label-box{
+    fill: red ;
+} */

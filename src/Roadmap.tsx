@@ -13,24 +13,94 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
     const [topic, setTopic] = useState<string>("");
     const [steps, setSteps] = useState<Array<{ x: number, name: string, label: string, color: string }>>([]);
+    const [colors, setColors] = useState<Array<string>>([]);
 
-    const getRandomColor = () => {
-        const r = Math.floor(Math.random() * 256).toString(16); 
-        const g = Math.floor(Math.random() * 256).toString(16); 
-        const b = Math.floor(Math.random() * 256).toString(16); 
-        return `#${r.padStart(2, '0')}${g.padStart(2, '0')}${b.padStart(2, '0')}`; 
-    }
+    function generateGradient(startColor: string, endColor: string, steps: number) {
+      const start = {
+          'Hex' : startColor,
+          'R' : parseInt(startColor.slice(1,3), 16),
+          'G' : parseInt(startColor.slice(3,5), 16),
+          'B' : parseInt(startColor.slice(5,7), 16)
+      }
+      const end = {
+          'Hex' : endColor,
+          'R' : parseInt(endColor.slice(1,3), 16),
+          'G' : parseInt(endColor.slice(3,5), 16),
+          'B' : parseInt(endColor.slice(5,7), 16)
+      }
+      const diffR = end['R'] - start['R'];
+      const diffG = end['G'] - start['G'];
+      const diffB = end['B'] - start['B'];
+  
+      steps -= 1; // Reduce the steps by one because we're including the start color
+      const stepSize = {
+          'R' : diffR / steps,
+          'G' : diffG / steps,
+          'B' : diffB / steps
+      }
+  
+      var gradientColors = [];
+      for (let i = 0; i <= steps; i++) {
+        const stepColor: { R: number; G: number; B: number; Hex: string } = {
+          'R': Math.round(start['R'] + (stepSize['R'] * i)),
+          'G': Math.round(start['G'] + (stepSize['G'] * i)),
+          'B': Math.round(start['B'] + (stepSize['B'] * i)),
+          'Hex': ''
+        };
+        stepColor['Hex'] = '#' + ((1 << 24) + (stepColor['R'] << 16) + (stepColor['G'] << 8) + stepColor['B']).toString(16).slice(1);
+        gradientColors.push(stepColor['Hex']);
+      }
+      return gradientColors;
+  }
 
-    const handleSteps = (response: JSON) => {
+    // const getRandomColor = () => {
+    //     const r = Math.floor(Math.random() * 256).toString(16); 
+    //     const g = Math.floor(Math.random() * 256).toString(16); 
+    //     const b = Math.floor(Math.random() * 256).toString(16); 
+    //     return `#${r.padStart(2, '0')}${g.padStart(2, '0')}${b.padStart(2, '0')}`; 
+    // }
+
+    const handleSteps = (response: Record<string, string>) => {
+        setColors(generateGradient("#5eb7b7", "#154d77", Object.keys(response).length));
+        const root = document.documentElement;
+
+        // Update the CSS variables
+        colors.forEach((color, index) => {
+          root.style.setProperty(`--highcharts-color-${index}`, color);
+  
+          // Create a new style element
+          const style = document.createElement('style');
+          // Set the CSS text
+          style.textContent = `
+              .steps:nth-child(${index + 1}) {
+                  background: var(--highcharts-color-${index}) !important;
+              }
+          `;
+          // Append the style element to the document head
+          document.head.append(style);
+      });
+        console.log(colors);
         const now = new Date();
         let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const stepResponse = []
-        for (let [key, value] of Object.entries(response)) {
-            stepResponse.push({ x: new Date(date).getTime(), name: key, label: value, color: getRandomColor()});
-            //setSteps((prev) => [...prev, { x: new Date(date), name: key, description: value, color: getRandomColor()}]);
-            date.setMonth(date.getMonth() + 3);
-        }
-        setSteps(stepResponse);
+
+        const result = Object.keys(response).map((key, index) => {
+          date.setMonth(date.getMonth() + 3);
+          return {
+            x: new Date(date).getTime(),
+            name: key,
+            label: response[key],
+            color: colors[index % colors.length]
+          };
+        });        
+
+
+        // const stepResponse = []
+        // for (let [key, value] of Object.entries(response)) {
+        //     stepResponse.push({ x: new Date(date).getTime(), name: key, label: value, color: getRandomColor()});
+        //     //setSteps((prev) => [...prev, { x: new Date(date), name: key, description: value, color: getRandomColor()}]);
+        //     date.setMonth(date.getMonth() + 3);
+        // }
+        setSteps(result);
     }
 
     const getRoadmap = async () => {
@@ -47,7 +117,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
     const handleTopic = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTopic(event.target.value);
     };
-    
+    console.log(colors);
     const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
     const options: Highcharts.Options = {
@@ -71,20 +141,28 @@ const Roadmap = (props: HighchartsReact.Props) => {
           visible: false
         },
       
+
         plotOptions: {
-          columnrange: {
-            dataLabels: {
-              useHTML: true,
-              color: '',
-              formatter: function () {
-                return `<div class="steps">${this.point.name}</div>`;
+            series: {
+              dataLabels: {
+                enabled: true,
+                format: '{point.name}: {point.label}',
+                style: {
+
+                  textOutline: 'none',
+                  fontWeight: 'normal'
+                },
+                useHTML: true,
+                formatter: function() {
+                  return `<div style="background-color: ${this.point.color}; padding: 5px;">${this.point.name}: ${this.point.options.label}</div>`;
+                }
               }
             }
-          }
-        },
+      },
         title: {
           text: `${topic} Roadmap`
         },
+
         tooltip: {
           enabled: false
         },
@@ -92,6 +170,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
         legend: {
           enabled: false
         },
+        colors: colors,
         series: [
           {
             type: 'timeline', // Explicit type
@@ -117,6 +196,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
 
           <HighchartsReact 
+          className="roadmap-chart"
             highcharts={Highcharts}
             options={options}
             ref={chartComponentRef}
