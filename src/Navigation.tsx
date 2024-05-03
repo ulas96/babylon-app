@@ -28,7 +28,9 @@ const Navigation = () => {
             <Navbar.Toggle className="wrap-toggle" aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse  className="basic-navbar-nav">
                 <Nav>
-                
+                <div className="navbar-header">
+                    <h1>Create your own AI powered educational journey</h1>  
+                </div>
                 </Nav>
             </Navbar.Collapse>
 
