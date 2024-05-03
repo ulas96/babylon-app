@@ -262,13 +262,11 @@ const Roadmap = (props: HighchartsReact.Props) => {
 
   return(
         <>
-          <div className="roadmap-header">
-            <h1>Create your own AI powered educational journey</h1>  
-          </div>
+
 
           <div className="roadmap-header">
-          <input value={topic} onChange={handleTopic}/>
-            <button onClick={getRoadmap}> Get Roadmap</button>
+            <input className="roadmap-input" value={topic} onChange={handleTopic}/>
+            <button className="roadmap-button" onClick={getRoadmap}>Get Roadmap</button>
           </div>
 
 
