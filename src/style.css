@@ -24,7 +24,9 @@
     justify-content: space-between;
     align-items: center;
     color: #154d77;
-    -webkit-text-stroke: 1px #5eb7b7;
+    -webkit-text-stroke: 0.5px #1c354c;
+    text-shadow: 0px 0px 2px white ; /* Add this line */
+
 }
 /* Roadmap */
 
