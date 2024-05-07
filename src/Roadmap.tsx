@@ -167,7 +167,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
                   borderWidth: 0,
                   
                   formatter: function() {
-                      return `<div style="background-color: ${this.point.color}; padding: 5px; border-radius: 5px; color: white; font-size: 17px;">${this.point.name}: ${this.point.options.label}</div>`;
+                      return `<div style="background-color: ${this.point.color}; padding: 5px; border-radius: 5px; color: white; font-size: 17px; word-wrap: break-word">${this.point.name}: ${this.point.options.label}</div>`;
                   },
                   style: {
                       color: 'black',
