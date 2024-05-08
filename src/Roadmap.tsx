@@ -167,12 +167,14 @@ const Roadmap = (props: HighchartsReact.Props) => {
                   borderWidth: 0,
                   
                   formatter: function() {
-                      return `<div style="background-color: ${this.point.color}; padding: 5px; border-radius: 5px; color: white; font-size: 17px; word-wrap: break-word">${this.point.name}: ${this.point.options.label}</div>`;
+                      return `<div style="background-color: ${this.point.color}; padding: 5px; border-radius: 5px; color: white; font-size: 17px; width: 600px; white-space: normal;">${this.point.name}: ${this.point.options.label}</div>`;
                   },
                   style: {
                       color: 'black',
                       textOutline: 'none',
-                      fontWeight: 'normal'
+                      fontWeight: 'normal',
+                      // overFlow: 'none',
+                      // crop: false
                   }
               }
           }
@@ -181,6 +183,7 @@ const Roadmap = (props: HighchartsReact.Props) => {
           text: `${topic} Roadmap`,
           style: {
             color: "#ffffff",
+            
           }
         },
 
